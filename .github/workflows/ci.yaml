@@ -1,0 +1,57 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+      
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync
+          uv pip list
+      
+      - name: Check model file
+        run: test -f app/data/model.json || (echo "Model file missing" && exit 1)
+      
+      - name: Run tests
+        run: uv run pytest --cov=app --cov-report=xml
+      
+      - name: Start server in background
+        run: |
+          uv run uvicorn app.main:app --host 127.0.0.1 --port 8080 &> server.log &
+          echo $! > server.pid
+      
+      - name: Wait for server to start
+        run: |
+          for i in {1..30}; do
+            if curl --fail http://127.0.0.1:8080/health; then
+              break
+            fi
+            sleep 1
+          done
+      
+      - name: Health check
+        run: curl --fail http://127.0.0.1:8080/health
+      
+      - name: Stop server
+        run: kill $(cat server.pid) || true
