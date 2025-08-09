@@ -1,64 +1,59 @@
 import pandas as pd
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, f1_score
 import xgboost as xgb
 import os
-import seaborn as sns
+import json
 
-# Download penguins dataset
+# Load dataset
 df = sns.load_dataset("penguins")
-
-print("Initial dataset shape:", df.shape)
-
 df = df.dropna()
 
-# Encode categorical variables
-le = LabelEncoder()
-df["species"] = le.fit_transform(df["species"])
+# Label encode target
+label_encoder = LabelEncoder()
+df["species"] = label_encoder.fit_transform(df["species"])
 
+# One-hot encode categorical variables
 df = pd.get_dummies(df, columns=["sex", "island"])
 
+# Split into features and target
 X = df.drop("species", axis=1)
 y = df["species"]
 
+# Save column structure for inference
+os.makedirs("app/data", exist_ok=True)
+with open("app/data/columns.json", "w") as f:
+    json.dump(list(X.columns), f)
+
+# Save label classes
+with open("app/data/label_classes.json", "w") as f:
+    json.dump(list(label_encoder.classes_), f)
+
+# Train-test split (stratified)
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y, test_size=0.2, stratify=y, random_state=42
 )
 
-print("Training set shape:", X_train.shape)
-print("Test set shape:", X_test.shape)
-
-print("Training set class distribution:")
-print(y_train.value_counts())
+# Train XGBoost model
 model = xgb.XGBClassifier(
-    n_estimators=3,
-    max_depth=2,
+    max_depth=3,
+    n_estimators=100,
     use_label_encoder=False,
     eval_metric="mlogloss",
-    verbosity=0,
+    verbosity=0
 )
+
 model.fit(X_train, y_train)
 
-print("Model training complete.")
-# Print class info
-n_classes = len(le.classes_)
-print(f"Number of classes: {n_classes}")
-print(f"Class names: {list(le.classes_)}")
-
 # Evaluate
-train_pred = model.predict(X_train)
-test_pred = model.predict(X_test)
+print("Training complete.")
+print("Train F1 Score:", f1_score(y_train, model.predict(X_train), average="macro"))
+print("Test F1 Score:", f1_score(y_test, model.predict(X_test), average="macro"))
+print("\nClassification Report (Test):\n")
+print(classification_report(y_test, model.predict(X_test), target_names=label_encoder.classes_))
 
-print("\nTrain classification report:")
-print(classification_report(y_train, train_pred, target_names=le.classes_))
-print("\nTest classification report:")
-print(classification_report(y_test, test_pred, target_names=le.classes_))
-
-print("\nTest confusion matrix:")
-print(confusion_matrix(y_test, test_pred))
-
-# Save model to app/data/model.json
-os.makedirs("app/data", exist_ok=True)
+# Save trained model
 model.save_model("app/data/model.json")
-print("Model trained and saved to app/data/model.json")
+print("Model saved to app/data/model.json")
