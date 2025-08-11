@@ -207,20 +207,20 @@ docker rm <container_id>
 4. **Configure Environment Variables**: Set GCS credentials and bucket information
 5. **Test Production Endpoints**: Verify health checks and prediction functionality
 
-## 🌐 Live Cloud Run Deployment - SUCCESS! ✅
+## 🌐 Live Cloud Run Deployment - SUCCESS! 
 
 ### Final Deployment URLs
-- **🚀 Live API**: https://penguin-api-87331348082.us-central1.run.app
-- **📖 Swagger Docs**: https://penguin-api-87331348082.us-central1.run.app/docs
-- **❤️ Health Check**: https://penguin-api-87331348082.us-central1.run.app/health
+- ** Live API**: https://penguin-api-87331348082.us-central1.run.app
+- ** Swagger Docs**: https://penguin-api-87331348082.us-central1.run.app/docs
+- ** Health Check**: https://penguin-api-87331348082.us-central1.run.app/health
 
 ### Deployment Verification Results
-- ✅ Service deployed successfully to Cloud Run
-- ✅ Health endpoint returns {"status": "ok"}
-- ✅ Interactive Swagger documentation accessible
-- ✅ Prediction endpoint working with sample data
-- ✅ Model loading from GCS successful
-- ✅ Public access enabled and working
+-  Service deployed successfully to Cloud Run
+-  Health endpoint returns {"status": "ok"}
+-  Interactive Swagger documentation accessible
+-  Prediction endpoint working with sample data
+-  Model loading from GCS successful
+-  Public access enabled and working
 
 ### Cloud Run Configuration
 - **Region**: us-central1
