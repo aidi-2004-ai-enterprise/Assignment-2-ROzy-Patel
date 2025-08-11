@@ -207,60 +207,25 @@ docker rm <container_id>
 4. **Configure Environment Variables**: Set GCS credentials and bucket information
 5. **Test Production Endpoints**: Verify health checks and prediction functionality
 
+## 🌐 Live Cloud Run Deployment - SUCCESS! ✅
 
+### Final Deployment URLs
+- **🚀 Live API**: https://penguin-api-87331348082.us-central1.run.app
+- **📖 Swagger Docs**: https://penguin-api-87331348082.us-central1.run.app/docs
+- **❤️ Health Check**: https://penguin-api-87331348082.us-central1.run.app/health
 
-Perfect, Rozy! You’ve done **all the hard parts** — now let’s wrap up Task 2 properly by summarizing your findings for `DEPLOYMENT.md`.
+### Deployment Verification Results
+- ✅ Service deployed successfully to Cloud Run
+- ✅ Health endpoint returns {"status": "ok"}
+- ✅ Interactive Swagger documentation accessible
+- ✅ Prediction endpoint working with sample data
+- ✅ Model loading from GCS successful
+- ✅ Public access enabled and working
 
----
-
-## ✅ Final Additions to `DEPLOYMENT.md` (based on your Docker results)
-
-Here’s what you can copy and paste directly:
-
----
-
-### 📦 Docker Image Details
-
-* **Image Name**: `lab3-penguin_apk`
-* **Image ID**: `b052ecb7d567`
-* **Created**: August 6, 2025
-* **Base Image**: `python:3.10-slim`
-* **Size**: **\~3.83 GB** (can be optimized)
-* **Exposed Port**: `8080` (required for Cloud Run)
-
----
-
-### 🔍 Docker Layer Summary
-
-You have **8 image layers**, shown in your `docker inspect` output:
-
-| Layer Index | Layer Hash (sha256) | Description                                    |
-| ----------- | ------------------- | ---------------------------------------------- |
-| 1–2         | e.g., `7cc7fe...`   | Base Python image (`python:3.10-slim`)         |
-| 3–5         | `f6dc80...`, etc.   | Dependency installation via `pip`              |
-| 6–8         | `204453...`         | Copying app code, config, and entrypoint setup |
-
----
-
-### 🛡️ Performance & Security Observations
-
-* Used minimal image: ✅ `python:3.10-slim`
-* Excluded unnecessary files via `.dockerignore`: ✅ `.env`, `__pycache__`, `.git`, etc.
-* Ran FastAPI using `uvicorn` on port `8080`: ✅
-* Service account key mounted with `:ro` (read-only): ✅
-* **Improvement Tip**: Current image size is **3.83GB** — consider multi-stage builds or pruning to reduce it.
-
----
-
-### 📝 Issues Encountered & Fixes
-
-| Issue                                    | Fix                                                                           |
-| ---------------------------------------- | ----------------------------------------------------------------------------- |
-| GCS credentials not detected             | Used `--env` + `-v` to mount `.json` and set `GOOGLE_APPLICATION_CREDENTIALS` |
-| `.env` and secrets included              | Solved via `.dockerignore`                                                    |
-| Large image size                         | Not optimized yet – possible with slimmer base image + cleanup                |
-| Health endpoint testing inside container | Added `CMD-SHELL curl` check via `HEALTHCHECK`                                |
-
----
-
-Would you like help creating the actual `Dockerfile` and `.dockerignore` contents to include in the same doc? Or do you already have them?
+### Cloud Run Configuration
+- **Region**: us-central1
+- **Memory**: 2Gi
+- **CPU**: 1
+- **Port**: 8080
+- **Max Instances**: 10
+- **Authentication**: Public (unauthenticated access)
