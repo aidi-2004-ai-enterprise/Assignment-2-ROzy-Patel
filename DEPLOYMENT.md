@@ -162,7 +162,7 @@ The image consists of **8 layers**:
 
 ## Production Readiness Checklist
 
-✅ **Completed:**
+**Completed:**
 - [x] Production-ready Dockerfile with minimal base image
 - [x] Proper environment variable configuration
 - [x] Health check implementation
@@ -170,7 +170,7 @@ The image consists of **8 layers**:
 - [x] Efficient resource usage
 - [x] FastAPI with uvicorn server setup
 
-🔄 **Recommended for Production:**
+**Recommended for Production:**
 - [ ] Multi-stage build implementation
 - [ ] Non-root user configuration
 - [ ] Vulnerability scanning
@@ -207,12 +207,12 @@ docker rm <container_id>
 4. **Configure Environment Variables**: Set GCS credentials and bucket information
 5. **Test Production Endpoints**: Verify health checks and prediction functionality
 
-## 🌐 Live Cloud Run Deployment - SUCCESS! 
+## Live Cloud Run Deployment - SUCCESS! 
 
 ### Final Deployment URLs
-- ** Live API**: https://penguin-api-87331348082.us-central1.run.app
-- ** Swagger Docs**: https://penguin-api-87331348082.us-central1.run.app/docs
-- ** Health Check**: https://penguin-api-87331348082.us-central1.run.app/health
+- **Live API**: https://penguin-api-87331348082.us-central1.run.app
+- **Swagger Docs**: https://penguin-api-87331348082.us-central1.run.app/docs
+- **Health Check**: https://penguin-api-87331348082.us-central1.run.app/health
 
 ### Deployment Verification Results
 -  Service deployed successfully to Cloud Run
