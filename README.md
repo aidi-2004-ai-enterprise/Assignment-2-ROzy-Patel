@@ -72,6 +72,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 - **API Root**: http://localhost:8000
 - **Interactive Docs**: http://localhost:8000/docs
 - **Health Check**: http://localhost:8000/health
+- **Cloud API**: https://penguin-api-87331348082.us-central1.run.app
+- **Interactive Cloud**: https://penguin-api-87331348082.us-central1.run.app/docs
 
 
 ###  Docker Deployment
@@ -351,6 +353,7 @@ When this happens, users would see 503 Service Unavailable errors while the cont
 The most likely culprit in my case would be the XGBoost model and machine learning libraries eating up memory, especially if multiple requests are being processed simultaneously. Each prediction might load additional data into memory, and if I'm not properly cleaning up after requests or if there's a memory leak, the container could gradually consume more RAM until it hits the limit.
 
 To fix this, I'd first increase the memory limit to 4GB or 8GB in the Cloud Run deployment settings, then reduce the number of concurrent requests per container so each one gets more dedicated memory. I could also add memory monitoring to track usage over time and implement request-level cleanup to free memory after each prediction. The key is balancing memory allocation with cost, since more memory means higher Cloud Run bills.
+
 
 
 
